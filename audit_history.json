@@ -1,0 +1,89 @@
+[
+  {
+    "id": "audit_1789111531_b176",
+    "timestamp": "2026-09-11 12:55:31",
+    "target_url": "https://example.com/",
+    "final_url": "https://example.com/",
+    "status_code": 200,
+    "security_score": 40,
+    "grade": "Grade D (Significant Vulnerabilities)",
+    "score_color": "#fb923c",
+    "summary": "The audited site is served over HTTPS but lacks all recommended security headers, exposing it to a range of attacks such as XSS, clickjacking, MIME\u2011sniffing, and information leakage. No cookies are set, so cookie\u2011flag issues are not present, and no forms were detected, eliminating CSRF concerns. The missing headers significantly weaken the site\u2019s security posture.",
+    "total_findings": 6,
+    "severity_counts": {
+      "Critical": 2,
+      "High": 1,
+      "Medium": 1,
+      "Low": 2,
+      "Informational": 0
+    },
+    "recon_data": {
+      "final_url": "https://example.com/",
+      "status_code": 200,
+      "headers": {
+        "Date": "Fri, 11 Sep 2026 07:25:18 GMT",
+        "Content-Type": "text/html",
+        "Transfer-Encoding": "chunked",
+        "Connection": "keep-alive",
+        "Server": "cloudflare",
+        "last-modified": "Thu, 10 Sep 2026 21:00:47 GMT",
+        "allow": "GET, HEAD",
+        "Age": "7749",
+        "cf-cache-status": "HIT",
+        "Content-Encoding": "gzip",
+        "CF-RAY": "a394f00ff86b3d2e-BLR"
+      },
+      "cookies": [],
+      "forms_detected": [],
+      "is_https": true
+    },
+    "audit_report": {
+      "summary": "The audited site is served over HTTPS but lacks all recommended security headers, exposing it to a range of attacks such as XSS, clickjacking, MIME\u2011sniffing, and information leakage. No cookies are set, so cookie\u2011flag issues are not present, and no forms were detected, eliminating CSRF concerns. The missing headers significantly weaken the site\u2019s security posture.",
+      "security_score": 40,
+      "findings": [
+        {
+          "title": "Missing Content-Security-Policy Header",
+          "severity": "Critical",
+          "description": "The response does not include a Content\u2011Security\u2011Policy (CSP) header, allowing arbitrary scripts to execute and enabling XSS attacks.",
+          "security_impact": "Cross\u2011Site Scripting (XSS)",
+          "remediation": "Add a CSP header that restricts script sources, e.g., `Content-Security-Policy: default-src 'self'; script-src 'self' https://trusted.cdn.com; object-src 'none';`"
+        },
+        {
+          "title": "Missing Strict-Transport-Security Header",
+          "severity": "Critical",
+          "description": "The site does not send an HSTS header, allowing downgrade attacks and man\u2011in\u2011the\u2011middle interception.",
+          "security_impact": "HTTPS Downgrade, MITM",
+          "remediation": "Add `Strict-Transport-Security: max-age=31536000; includeSubDomains; preload` to enforce HTTPS"
+        },
+        {
+          "title": "Missing X-Frame-Options Header",
+          "severity": "High",
+          "description": "The site can be framed by other domains, making it vulnerable to clickjacking.",
+          "security_impact": "Clickjacking",
+          "remediation": "Add `X-Frame-Options: DENY` or `SAMEORIGIN`"
+        },
+        {
+          "title": "Missing X-Content-Type-Options Header",
+          "severity": "Medium",
+          "description": "Without this header, browsers may MIME\u2011sniff content, potentially executing unintended scripts.",
+          "security_impact": "MIME Sniffing",
+          "remediation": "Add `X-Content-Type-Options: nosniff`"
+        },
+        {
+          "title": "Missing Referrer-Policy Header",
+          "severity": "Low",
+          "description": "The absence of a Referrer-Policy header may leak referrer information to third parties.",
+          "security_impact": "Information Leakage",
+          "remediation": "Add `Referrer-Policy: no-referrer-when-downgrade` or stricter policy"
+        },
+        {
+          "title": "Missing Permissions-Policy Header",
+          "severity": "Low",
+          "description": "No Permissions-Policy header means the site cannot restrict use of APIs like geolocation, camera, etc., potentially exposing user data.",
+          "security_impact": "API Abuse",
+          "remediation": "Add `Permissions-Policy: geolocation=(), microphone=()` to restrict APIs"
+        }
+      ]
+    }
+  }
+]
